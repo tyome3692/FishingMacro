@@ -7,47 +7,37 @@ namespace FIshingMacro
     internal partial class NativeMethods
     {
         [LibraryImport("user32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial IntPtr GetForegroundWindow();
 
         [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial int GetWindowTextLengthW(IntPtr hWnd);
 
         [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial int GetWindowTextW(IntPtr hWnd, [Out] char[] lpString, int nMaxCount);
 
         [LibraryImport("user32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial IntPtr WindowFromPoint(POINT point);
 
         [LibraryImport("kernel32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool AllocConsole();
 
         [LibraryImport("user32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         [LibraryImport("kernel32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial IntPtr GetConsoleWindow();
 
         [LibraryImport("user32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
         [LibraryImport("user32.dll")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
 
 
         [LibraryImport("user32.dll", EntryPoint = "mouse_event")]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         internal static partial void MouseEvent(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
 
         private const int SWP_SHOWWINDOW = 0x0040;

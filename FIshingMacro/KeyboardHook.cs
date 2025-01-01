@@ -11,17 +11,17 @@ namespace FIshingMacro
         protected const int WM_SYSKEYUP = 0x0105;
 
         [StructLayout(LayoutKind.Sequential)]
-        public class KBDLLHOOKSTRUCT
+        internal class KBDLLHOOKSTRUCT
         {
-            public uint vkCode;
-            public uint scanCode;
-            public KBDLLHOOKSTRUCTFlags flags;
-            public uint time;
-            public UIntPtr dwExtraInfo;
+            internal uint vkCode;
+            internal uint scanCode;
+            internal KBDLLHOOKSTRUCTFlags flags;
+            internal uint time;
+            internal UIntPtr dwExtraInfo;
         }
 
         [Flags]
-        public enum KBDLLHOOKSTRUCTFlags : uint
+        internal enum KBDLLHOOKSTRUCTFlags : uint
         {
             KEYEVENTF_EXTENDEDKEY = 0x0001,
             KEYEVENTF_KEYUP = 0x0002,
@@ -30,20 +30,16 @@ namespace FIshingMacro
         }
 
         [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial IntPtr SetWindowsHookExW(int idHook, KeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
 
         [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool UnhookWindowsHookEx(IntPtr hhk);
 
         [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
         [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         private static partial IntPtr GetModuleHandleW(string lpModuleName);
 
         private delegate IntPtr KeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
@@ -51,7 +47,7 @@ namespace FIshingMacro
         private KeyboardProc? proc;
         private IntPtr hookId = IntPtr.Zero;
 
-        public void Hook()
+        internal void Hook()
         {
             if (hookId == IntPtr.Zero)
             {
@@ -66,13 +62,13 @@ namespace FIshingMacro
             }
         }
 
-        public void UnHook()
+        internal void UnHook()
         {
             UnhookWindowsHookEx(hookId);
             hookId = IntPtr.Zero;
         }
 
-        public IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam)
+        internal IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
@@ -89,9 +85,9 @@ namespace FIshingMacro
             return CallNextHookEx(hookId, nCode, wParam, lParam);
         }
 
-        public delegate void KeyEventHandler(object sender, KeyEventArgs e);
-        public event KeyEventHandler? KeyDownEvent;
-        public event KeyEventHandler? KeyUpEvent;
+        internal delegate void KeyEventHandler(object sender, KeyEventArgs e);
+        internal event KeyEventHandler? KeyDownEvent;
+        internal event KeyEventHandler? KeyUpEvent;
 
         protected void OnKeyDownEvent(int keyCode)
         {
@@ -104,11 +100,11 @@ namespace FIshingMacro
 
     }
 
-    public class KeyEventArgs : EventArgs
+    internal class KeyEventArgs : EventArgs
     {
-        public int KeyCode { get; }
+        internal int KeyCode { get; }
 
-        public KeyEventArgs(int keyCode)
+        internal KeyEventArgs(int keyCode)
         {
             KeyCode = keyCode;
         }
