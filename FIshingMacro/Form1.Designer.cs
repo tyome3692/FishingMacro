@@ -93,6 +93,7 @@
             Controls.Add(textBox1);
             Controls.Add(button1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "Form1";
             Text = "Form1";
             TopMost = true;
