@@ -1,6 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using System.Drawing.Imaging;
-using System.Buffers;
+﻿using System.Buffers;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace FIshingMacro
 {
@@ -17,10 +17,6 @@ namespace FIshingMacro
 
         [LibraryImport("user32.dll")]
         private static partial IntPtr WindowFromPoint(POINT point);
-
-        [LibraryImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static partial bool AllocConsole();
 
         [LibraryImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -169,13 +165,13 @@ namespace FIshingMacro
         /// </summary>
         /// <returns></returns>
 
-        public static string GetCursorWindowTitle()
+        internal static string GetCursorWindowTitle()
         {
             POINT point = new POINT(Cursor.Position.X, Cursor.Position.Y);
             IntPtr hWnd = WindowFromPoint(point);
             return GetWindowTitleFromhWnd(hWnd);
         }
-        public static Bitmap GetHiddenWindow()
+        internal static Bitmap GetHiddenWindow()
         {
             IntPtr handle = GetForegroundWindow();
 
@@ -193,7 +189,7 @@ namespace FIshingMacro
 
                 memg.ReleaseHdc(dc);
                 memg.Dispose();
-            }           
+            }
             return img;
         }
     }
