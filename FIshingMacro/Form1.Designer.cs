@@ -96,7 +96,6 @@
             MaximizeBox = false;
             Name = "Form1";
             Text = "Form1";
-            TopMost = true;
             FormClosed += Form1_FormClosed;
             ResumeLayout(false);
             PerformLayout();
