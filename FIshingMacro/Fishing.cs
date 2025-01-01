@@ -42,7 +42,6 @@ namespace FIshingMacro
         }
 
         static bool isRunning;
-
         internal static async void FullAutomaticalyFishing()
         {
             Console.Clear();

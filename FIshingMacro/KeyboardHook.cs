@@ -97,7 +97,6 @@ namespace FIshingMacro
         {
             KeyUpEvent?.Invoke(this, new KeyEventArgs(keyCode));
         }
-
     }
 
     internal class KeyEventArgs : EventArgs
