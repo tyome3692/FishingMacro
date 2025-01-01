@@ -11,14 +11,28 @@ namespace FIshingMacro
         private const uint MOUSEEVENTIF_RIGHTDOWN = 0x0008;
         private const uint MOUSEEVENTIF_RIGHTUP = 0x0010;
 
+        const byte RED = 255;
+        const byte GREEN = 85;
+        const byte BLUE = 85;
+
+        const int WREFACTOR = 1936;
+        const int HREFACTOR = 1024;
+
 
         private static bool PicCheck(int threshold = 10)
         {
             Bitmap coordBit = NativeMethods.GetHiddenWindow();
             if (coordBit.Width < 50)
                 return false;
-            Rectangle checkRect = new Rectangle(coordBit.Width / 2 - 25, coordBit.Height / 2 + 25, 50, 65);
+
+            int refactedX = (coordBit.Width / 2 - 25) * coordBit.Width / WREFACTOR;
+            int refactedY = (coordBit.Height / 2 + 25) * coordBit.Height / HREFACTOR;
+            int refactedW = 50 * coordBit.Width / WREFACTOR;
+            int refactedH = 65 * coordBit.Height / HREFACTOR;
+
+            Rectangle checkRect = new Rectangle(refactedX, refactedY, refactedW, refactedH);
             coordBit = coordBit.Clone(checkRect, coordBit.PixelFormat);
+
             Form1.tsp.SetRect(checkRect);
 
             BitmapData data = coordBit.LockBits(new Rectangle(0, 0, coordBit.Width, coordBit.Height), ImageLockMode.ReadOnly, coordBit.PixelFormat);
@@ -29,11 +43,7 @@ namespace FIshingMacro
                 for (int w = 0; w < data.Width; w++)
                 {
                     int pos = h * data.Stride + w * 4;//Format32bppArgbだと*4
-                    byte red = 255;
-                    byte green = 85;
-                    byte blue = 85;
-
-                    int diff = (Math.Abs(blue - buf[pos]) + Math.Abs(green - buf[pos + 1]) + Math.Abs(red - buf[pos + 2])) / 3;
+                    int diff = (Math.Abs(BLUE - buf[pos]) + Math.Abs(GREEN - buf[pos + 1]) + Math.Abs(RED - buf[pos + 2])) / 3;
                     if (diff < threshold)
                     {
                         coordBit.UnlockBits(data);
