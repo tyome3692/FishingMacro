@@ -11,16 +11,28 @@ namespace FIshingMacro
         private const uint MOUSEEVENTIF_RIGHTDOWN = 0x0008;
         private const uint MOUSEEVENTIF_RIGHTUP = 0x0010;
 
+        const byte RED = 255;
+        const byte GREEN = 85;
+        const byte BLUE = 85;
+
+        const int WREFACTOR = 1936;
+        const int HREFACTOR = 1024;
+
+
         private static bool PicCheck(int threshold = 10)
         {
             Bitmap coordBit = NativeMethods.GetHiddenWindow();
-            coordBit = coordBit.Clone(new Rectangle(coordBit.Width / 2 - 25, coordBit.Height / 2 + 25, 50, 65), coordBit.PixelFormat);
+            if (coordBit.Width < 50)
+                return false;
 
-            int pos = 0;
-            byte red = 255;
-            byte green = 85;
-            byte blue = 85;
-            int diff = 0;
+            int refactedX = (coordBit.Width / 2 - 25) * coordBit.Width / WREFACTOR;
+            int refactedY = (coordBit.Height / 2 + 25) * coordBit.Height / HREFACTOR;
+            int refactedW = 50 * coordBit.Width / WREFACTOR;
+            int refactedH = 65 * coordBit.Height / HREFACTOR;
+
+            Rectangle checkRect = new Rectangle(refactedX, refactedY, refactedW, refactedH);
+            coordBit = coordBit.Clone(checkRect, coordBit.PixelFormat);
+
             BitmapData data = coordBit.LockBits(new Rectangle(0, 0, coordBit.Width, coordBit.Height), ImageLockMode.ReadOnly, coordBit.PixelFormat);
             byte[] buf = new byte[data.Stride * data.Height];
             Marshal.Copy(data.Scan0, buf, 0, buf.Length);
@@ -28,8 +40,8 @@ namespace FIshingMacro
             {
                 for (int w = 0; w < data.Width; w++)
                 {
-                    pos = h * data.Stride + w * 4;//Format32bppArgbだと*4
-                    diff = (Math.Abs(blue - buf[pos]) + Math.Abs(green - buf[pos + 1]) + Math.Abs(red - buf[pos + 2])) / 3;
+                    int pos = h * data.Stride + w * 4;//Format32bppArgbだと*4
+                    int diff = (Math.Abs(BLUE - buf[pos]) + Math.Abs(GREEN - buf[pos + 1]) + Math.Abs(RED - buf[pos + 2])) / 3;
                     if (diff < threshold)
                     {
                         coordBit.UnlockBits(data);
@@ -44,11 +56,7 @@ namespace FIshingMacro
         }
 
         static bool isRunning;
-        static int num;
-        static Stopwatch rapSW = new Stopwatch();
-        static TimeSpan allTime = new TimeSpan(0);
-
-        public static async void FullAutomaticalyFishing()
+        internal static async void FullAutomaticalyFishing()
         {
             Console.Clear();
             if (isRunning)
@@ -61,10 +69,12 @@ namespace FIshingMacro
             await AutoFishingT().ConfigureAwait(false);
         }
 
-        public static async Task AutoFishingT()
+        internal static async Task AutoFishingT()
         {
             await Task.Delay(100).ConfigureAwait(false);
-
+            int num = 0;
+            Stopwatch rapSW = new Stopwatch();
+            TimeSpan allTime = new TimeSpan(0);
             while (isRunning)
             {
                 NativeMethods.MouseEvent(MOUSEEVENTIF_RIGHTDOWN, 0, 0, 0, 0);
@@ -72,7 +82,7 @@ namespace FIshingMacro
                 rapSW.Restart();
                 while (isRunning && !PicCheck())
                 {
-                    await Task.Delay(100);
+                    await Task.Delay(100).ConfigureAwait(true);
                     string windowTitle = NativeMethods.GetCursorWindowTitle().Replace("\0", "", StringComparison.Ordinal);
                     if (windowTitle != "Minecraft 1.8.9")
                     {
@@ -81,12 +91,12 @@ namespace FIshingMacro
                         isRunning = false;
                         break;
                     }
-                    LogHistory();
+                    LogHistory(num, rapSW.Elapsed, allTime);
                 }
                 allTime += rapSW.Elapsed;
                 NativeMethods.MouseEvent(MOUSEEVENTIF_RIGHTDOWN, 0, 0, 0, 0);
                 NativeMethods.MouseEvent(MOUSEEVENTIF_RIGHTUP, 0, 0, 0, 0);
-                await Task.Delay(100);
+                await Task.Delay(100).ConfigureAwait(true);
                 num++;
                 if (num % 14 == 0)
                 {
@@ -100,7 +110,7 @@ namespace FIshingMacro
             }
             Console.WriteLine("stop");
         }
-        public static void MouseMoveCircle(int baseMove, int max = 40)
+        internal static void MouseMoveCircle(int baseMove, int max = 40)
         {
             int angle = 180 - 180 * (max - 2) / max;
             Vector2 vec = new Vector2(baseMove * MathF.Sin(360 * MathF.PI / max / 180), baseMove * (1 - MathF.Cos(360 * MathF.PI / max / 180)));
@@ -121,15 +131,15 @@ namespace FIshingMacro
             Complex result = tar * rot;
             return new Vector2((float)result.Real, (float)result.Imaginary);
         }
-        private static void LogHistory()
+        private static void LogHistory(int num, TimeSpan rapTime, TimeSpan allTime)
         {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine($"NOW : {DateTime.Now}");
             Console.WriteLine($"NUM : {num}");
-            Console.WriteLine($"RAP : {rapSW.Elapsed}");
+            Console.WriteLine($"RAP : {rapTime}");
             Console.WriteLine($"ALL : {allTime}");
         }
-        public static void StopMacro()
+        internal static void StopMacro()
         {
             isRunning = false;
         }

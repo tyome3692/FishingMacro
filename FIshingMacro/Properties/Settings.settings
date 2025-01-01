@@ -2,7 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FIshingMacro.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="key" Type="System.Int32" Scope="User">
+    <Setting Name="start" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="end" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

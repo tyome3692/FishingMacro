@@ -32,6 +32,8 @@
             button1 = new Button();
             textBox1 = new TextBox();
             label1 = new Label();
+            label2 = new Label();
+            textBox2 = new TextBox();
             SuspendLayout();
             // 
             // button1
@@ -49,7 +51,7 @@
             textBox1.Location = new Point(12, 33);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(104, 23);
+            textBox1.Size = new Size(54, 23);
             textBox1.TabIndex = 1;
             textBox1.KeyDown += textBox1_KeyDown;
             // 
@@ -62,18 +64,38 @@
             label1.TabIndex = 2;
             label1.Text = "label1";
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(78, 15);
+            label2.Name = "label2";
+            label2.Size = new Size(38, 15);
+            label2.TabIndex = 3;
+            label2.Text = "label2";
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(78, 33);
+            textBox2.Name = "textBox2";
+            textBox2.ReadOnly = true;
+            textBox2.Size = new Size(54, 23);
+            textBox2.TabIndex = 4;
+            textBox2.KeyDown += textBox2_KeyDown;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(205, 125);
+            Controls.Add(textBox2);
+            Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(textBox1);
             Controls.Add(button1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "Form1";
             Text = "Form1";
-            TopMost = true;
             FormClosed += Form1_FormClosed;
             ResumeLayout(false);
             PerformLayout();
@@ -84,5 +106,7 @@
         private Button button1;
         private TextBox textBox1;
         private Label label1;
+        private Label label2;
+        private TextBox textBox2;
     }
 }

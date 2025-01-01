@@ -26,12 +26,24 @@ namespace FIshingMacro.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int key {
+        public int start {
             get {
-                return ((int)(this["key"]));
+                return ((int)(this["start"]));
             }
             set {
-                this["key"] = value;
+                this["start"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int end {
+            get {
+                return ((int)(this["end"]));
+            }
+            set {
+                this["end"] = value;
             }
         }
     }
