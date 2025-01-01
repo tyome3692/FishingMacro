@@ -11,7 +11,6 @@ namespace FIshingMacro
         private const uint MOUSEEVENTIF_RIGHTDOWN = 0x0008;
         private const uint MOUSEEVENTIF_RIGHTUP = 0x0010;
 
-        static TestPictureView tsp = new TestPictureView();
         private static bool PicCheck(int threshold = 10)
         {
             Bitmap coordBit = NativeMethods.GetHiddenWindow();
@@ -19,8 +18,6 @@ namespace FIshingMacro
                 return false;
             Rectangle checkRect = new Rectangle(coordBit.Width / 2 - 25, coordBit.Height / 2 + 25, 50, 65);            
             coordBit = coordBit.Clone(checkRect, coordBit.PixelFormat);
-
-            tsp.SetRect(checkRect);
             BitmapData data = coordBit.LockBits(new Rectangle(0, 0, coordBit.Width, coordBit.Height), ImageLockMode.ReadOnly, coordBit.PixelFormat);
             byte[] buf = new byte[data.Stride * data.Height];
             Marshal.Copy(data.Scan0, buf, 0, buf.Length);
@@ -56,7 +53,6 @@ namespace FIshingMacro
                 isRunning = false;
                 return;
             }
-            tsp.Show();
 
             isRunning = true;
             await AutoFishingT().ConfigureAwait(false);

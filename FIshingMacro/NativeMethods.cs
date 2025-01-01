@@ -110,25 +110,24 @@ namespace FIshingMacro
             IntPtr hWnd = WindowFromPoint(point);
             return GetWindowTitleFromhWnd(hWnd);
         }
+
         public static Bitmap GetHiddenWindow()
         {
             IntPtr handle = GetForegroundWindow();
 
             //ウィンドウサイズ取得
-            GetWindowRect(handle, out RECT rect);
+            RECT rect;
+            GetWindowRect(handle, out rect);
 
-            Bitmap img = new Bitmap(1, 1);
             //ウィンドウをキャプチャする
-            if (rect.width != 0 && rect.height != 0)
-            {
-                img = new Bitmap(rect.width, rect.height);
-                Graphics memg = Graphics.FromImage(img);
-                IntPtr dc = memg.GetHdc();
-                PrintWindow(handle, dc, 0);
+            Bitmap img = new Bitmap(rect.width, rect.height);
 
-                memg.ReleaseHdc(dc);
-                memg.Dispose();
-            }           
+            Graphics memg = Graphics.FromImage(img);
+            IntPtr dc = memg.GetHdc();
+            PrintWindow(handle, dc, 0);
+
+            memg.ReleaseHdc(dc);
+            memg.Dispose();
             return img;
         }
     }
