@@ -33,8 +33,6 @@ namespace FIshingMacro
             Rectangle checkRect = new Rectangle(refactedX, refactedY, refactedW, refactedH);
             coordBit = coordBit.Clone(checkRect, coordBit.PixelFormat);
 
-            Form1.tsp.SetRect(checkRect);
-
             BitmapData data = coordBit.LockBits(new Rectangle(0, 0, coordBit.Width, coordBit.Height), ImageLockMode.ReadOnly, coordBit.PixelFormat);
             byte[] buf = new byte[data.Stride * data.Height];
             Marshal.Copy(data.Scan0, buf, 0, buf.Length);

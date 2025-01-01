@@ -7,7 +7,7 @@ namespace FIshingMacro
     {
         static KeyboardHook kbHook = new KeyboardHook();
         static int optionKeyCode;
-        internal static TestPictureView tsp = new TestPictureView();
+
         public Form1()
         {
             InitializeComponent();
@@ -35,12 +35,6 @@ namespace FIshingMacro
                     break;
                 case int start when start == optionKeyCode:
                     Fishing.FullAutomaticalyFishing();
-                    break;
-                case (int)Keys.F7:
-                    tsp.Show();
-                    break;
-                case (int)Keys.F8:
-                    tsp.Close();
                     break;
             }
         }
