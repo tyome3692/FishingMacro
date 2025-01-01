@@ -14,7 +14,10 @@ namespace FIshingMacro
         private static bool PicCheck(int threshold = 10)
         {
             Bitmap coordBit = NativeMethods.GetHiddenWindow();
-            coordBit = coordBit.Clone(new Rectangle(coordBit.Width / 2 - 25, coordBit.Height / 2 + 25, 50, 65), coordBit.PixelFormat);
+            if(coordBit.Width < 50)
+                return false;
+            Rectangle checkRect = new Rectangle(coordBit.Width / 2 - 25, coordBit.Height / 2 + 25, 50, 65);            
+            coordBit = coordBit.Clone(checkRect, coordBit.PixelFormat);
             BitmapData data = coordBit.LockBits(new Rectangle(0, 0, coordBit.Width, coordBit.Height), ImageLockMode.ReadOnly, coordBit.PixelFormat);
             byte[] buf = new byte[data.Stride * data.Height];
             Marshal.Copy(data.Scan0, buf, 0, buf.Length);
