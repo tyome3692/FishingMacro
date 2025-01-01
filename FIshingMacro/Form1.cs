@@ -1,4 +1,3 @@
-
 using FIshingMacro.Properties;
 
 namespace FIshingMacro
@@ -6,20 +5,19 @@ namespace FIshingMacro
     public partial class Form1 : Form
     {
         static KeyboardHook kbHook = new KeyboardHook();
-        static int optionKeyCode;
-
+        static bool isReady;
         public Form1()
         {
             InitializeComponent();
             kbHook.KeyDownEvent += KbHook_KeyDownEvent;
             NativeMethods.AttachConsole();
-            textBox1.Text = ((Keys)Properties.Settings.Default.key).ToString();
+            textBox1.Text = ((Keys)Properties.Settings.Default.start).ToString();
+            textBox2.Text = ((Keys)Properties.Settings.Default.end).ToString();
             Console.Title = "自動釣り機";
-            label1.Text = "使用するキー";
+            label1.Text = "開始キー";
+            label2.Text = "終了キー";
             button1.Text = "開始";
             Text = "自動釣り機";
-
-            optionKeyCode = Settings.Default.key;
             MaximumSize = Size;
             MinimumSize = Size;
         }
@@ -28,13 +26,13 @@ namespace FIshingMacro
         {
             switch (e.KeyCode)
             {
-                case (int)Keys.F10:
+                case int start when start == Properties.Settings.Default.start:
+                    Fishing.FullAutomaticalyFishing();
+                    break;
+                case int end when end == Properties.Settings.Default.end:
                     Fishing.StopMacro();
                     kbHook.UnHook();
                     Close();
-                    break;
-                case int start when start == optionKeyCode:
-                    Fishing.FullAutomaticalyFishing();
                     break;
             }
         }
@@ -46,21 +44,36 @@ namespace FIshingMacro
                 MessageBox.Show("使用するキーを指定してください");
                 return;
             }
-            kbHook.Hook();
-            Hide();
+            isReady = !isReady;
+            if (isReady)
+            {
+                button1.Text = "停止";
+                kbHook.Hook();
+            }
+            else
+            {
+                button1.Text = "起動";
+                kbHook.UnHook();
+            }
         }
 
         private void textBox1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             textBox1.Text = e.KeyCode.ToString();
-            optionKeyCode = (int)e.KeyCode;
-            Settings.Default.key = optionKeyCode;
+            Settings.Default.start = (int)e.KeyCode;
             Settings.Default.Save();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             kbHook.UnHook();
+        }
+
+        private void textBox2_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            textBox2.Text = e.KeyCode.ToString();
+            Settings.Default.end = (int)e.KeyCode;
+            Settings.Default.Save();
         }
     }
 }
