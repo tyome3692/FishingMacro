@@ -10,7 +10,6 @@ namespace FIshingMacro
         {
             InitializeComponent();
             kbHook.KeyDownEvent += KbHook_KeyDownEvent;
-            NativeMethods.AttachConsole();
             textBox1.Text = ((Keys)Properties.Settings.Default.start).ToString();
             textBox2.Text = ((Keys)Properties.Settings.Default.end).ToString();
             Console.Title = "Ž©“®’Þ‚è‹@";
@@ -47,11 +46,13 @@ namespace FIshingMacro
             isReady = !isReady;
             if (isReady)
             {
+                NativeMethods.AttachConsole();
                 button1.Text = "’âŽ~";
                 kbHook.Hook();
             }
             else
             {
+                NativeMethods.FreeConsole();
                 button1.Text = "‹N“®";
                 kbHook.UnHook();
             }
