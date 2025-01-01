@@ -12,7 +12,7 @@ namespace FIshingMacro
             kbHook.KeyDownEvent += KbHook_KeyDownEvent;
             textBox1.Text = ((Keys)Properties.Settings.Default.start).ToString();
             textBox2.Text = ((Keys)Properties.Settings.Default.end).ToString();
-            Console.Title = "自動釣り機";
+
             label1.Text = "開始キー";
             label2.Text = "終了キー";
             button1.Text = "開始";
@@ -46,6 +46,12 @@ namespace FIshingMacro
             isReady = !isReady;
             if (isReady)
             {
+                if (textBox1.Text == textBox2.Text)
+                {
+                    MessageBox.Show("同じキーは選択できません");
+                    isReady = false;
+                    return;
+                }
                 NativeMethods.AttachConsole();
                 button1.Text = "停止";
                 kbHook.Hook();
