@@ -51,6 +51,8 @@ namespace FIshingMacro
                     isReady = false;
                     return;
                 }
+                textBox1.Enabled = false;
+                textBox2.Enabled = false;
                 NativeMethods.AttachConsole();
                 button1.Text = "’âŽ~";
                 kbHook.Hook();
@@ -59,6 +61,8 @@ namespace FIshingMacro
             {
                 NativeMethods.FreeConsole();
                 button1.Text = "‹N“®";
+                textBox1.Enabled = true;
+                textBox2.Enabled = true;
                 kbHook.UnHook();
             }
         }
