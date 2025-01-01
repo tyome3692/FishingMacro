@@ -70,13 +70,13 @@ namespace FIshingMacro
 
         internal IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
+            if (nCode >= 0 && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))
             {
                 var kb = (KBDLLHOOKSTRUCT?)Marshal.PtrToStructure(lParam, typeof(KBDLLHOOKSTRUCT));
                 var vkCode = (int)(kb?.vkCode ?? throw new ArgumentNullException(nameof(lParam)));
                 OnKeyDownEvent(vkCode);
             }
-            else if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
+            else if (nCode >= 0 && (wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
             {
                 var kb = (KBDLLHOOKSTRUCT?)Marshal.PtrToStructure(lParam, typeof(KBDLLHOOKSTRUCT));
                 var vkCode = (int)(kb?.vkCode ?? throw new ArgumentNullException(nameof(lParam)));
